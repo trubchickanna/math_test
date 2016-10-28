@@ -1,3 +1,4 @@
-js/bootstrap.min.js
-css/bootstrap.min.css
-css/bootstrap-theme.min.css
+/js/bootstrap.min.js
+/css/bootstrap.min.css
+/css/bootstrap-theme.min.css
+/bower_components/*
