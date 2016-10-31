@@ -1,12 +1,25 @@
-var tasks=[
-	{
-		'taskQuestion':'Для приготовления обеда повару понадобилось 24 кг картошки, свеклы в 3 раза меньше, а лука в 2 раза меньше чем свеклы. Сколько килограмм лука потратил повар?',
-		'answer':'4'
-	}
-];
+var app = app || {};
 
-var task_number=document.getElementById("task_number");
-task_number.innerHTML="Задание № 1.";
+app.modelTask = {
+    _data: null,
+	
+	init: function(data){
+        this.setDataFromJson(data);
+    },
 
-var task_question=document.getElementById("task_question");
-task_question.innerHTML=tasks[0].taskQuestion;
+    setDataFromJson: function(data) {
+       this._data = data;
+    },
+
+    getTaskById: function(id) {
+        for(var i = 0; i < this._data.length; i++) {
+            for(var key in this._data[i]) {
+                if(key === 'id' && this._data[i][key] == id) {
+                   return this._data[i];
+                }
+            }
+        }
+    }
+};
+
+cinema.modelFilms.init(TaskData);
