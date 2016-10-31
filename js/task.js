@@ -22,4 +22,4 @@ app.modelTask = {
     }
 };
 
-cinema.modelFilms.init(TaskData);
+cinema.modelTask.init(TaskData);
