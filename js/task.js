@@ -22,9 +22,13 @@ task.modelTask = {
     }
 };
 
+var TaskData={};
+
 task.modelTask.init(TaskData);
 
 task.ViewTask = function(taskId) {
-    this._taskId = taskId;
-	console.log(_taskId);
+	this.taskId = taskId;
+	console.log(taskId);
 };
+
+var myTask=task.ViewTask(5);
