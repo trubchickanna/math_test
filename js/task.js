@@ -27,8 +27,18 @@ var TaskData={};
 task.modelTask.init(TaskData);
 
 task.ViewTask = function(taskId) {
-	this.taskId = taskId;
-	console.log(taskId);
+	this._taskId = taskId;
+	this._model = task.modelTask;
+	
+	this.elem = document.getElementById("task");
+	
+	this.renderTask = function(id){
+		console.log(id);
+	};
+	
+	this.getTaskFromModel = function(){
+		var task = this._model.getTaskById(this._taskId);
+	};
 };
 
-var myTask=task.ViewTask(5);
+var myTask=new task.ViewTask(5);
