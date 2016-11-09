@@ -30,15 +30,16 @@ task.ViewTask = function(taskId) {
 	this.task_number = document.getElementById("task_number");
 	this.task_question = document.getElementById("task_question");
 	
-	this.renderTask = function(id){
-		this.task_number.innerHTML = '<p> Задача № '+(id+1)+'.</p>';
-		this.task_question.innerHTML = '<p>'+this._model.getTaskById(id).question+'</p>';
+	this.renderTask = function(taskObj){
+		this.task_number.innerHTML = '<p> Задача № '+(taskObj.id+1)+'.</p>';
+		this.task_question.innerHTML = '<p>'+taskObj.question+'</p>';
 	};
 	
-	this.getTaskFromModel = function(){
-		var taskById = this._model.getDataFromJson(this._taskId);
+	this.getTaskFromModelById = function(){
+		var taskById = this._model.getTaskById(this._taskId);
+		this.renderTask(taskById);
 	};
 };
 
-var myTask=new task.ViewTask(0);
-myTask.renderTask(1);
+var myTask=new task.ViewTask(1);
+myTask.getTaskFromModelById();
