@@ -9,7 +9,6 @@ task.modelTask = {
 
     setDataFromJson: function(data) {
 	   this._data = JSON.parse(data);
-	   console.log(this._data[1].question);
     },
 
     getTaskById: function(id) {
@@ -27,17 +26,19 @@ task.modelTask.init(taskData);
 
 task.ViewTask = function(taskId) {
 	this._taskId = taskId;
-	this._model = task.modelTask;
-	
-	this.elem = document.getElementById("task");
+	this._model = task.modelTask;	
+	this.task_number = document.getElementById("task_number");
+	this.task_question = document.getElementById("task_question");
 	
 	this.renderTask = function(id){
-		console.log(id);
+		this.task_number.innerHTML = '<p> Задача № '+(id+1)+'.</p>';
+		this.task_question.innerHTML = '<p>'+this._model.getTaskById(id).question+'</p>';
 	};
 	
 	this.getTaskFromModel = function(){
-		var taskById = this._model.getTaskById(this._taskId);
+		var taskById = this._model.getDataFromJson(this._taskId);
 	};
 };
 
-var myTask=new task.ViewTask(5);
+var myTask=new task.ViewTask(0);
+myTask.renderTask(1);
