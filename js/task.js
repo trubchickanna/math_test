@@ -8,7 +8,8 @@ task.modelTask = {
     },
 
     setDataFromJson: function(data) {
-	   this._data = JSON.parse("\""+data+"\"");
+	   this._data = JSON.parse(data);
+	   console.log(this._data[1].question);
     },
 
     getTaskById: function(id) {
@@ -22,9 +23,7 @@ task.modelTask = {
     }
 };
 
-var TaskData={};
-
-task.modelTask.init(TaskData);
+task.modelTask.init(taskData);
 
 task.ViewTask = function(taskId) {
 	this._taskId = taskId;
