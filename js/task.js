@@ -8,7 +8,7 @@ task.modelTask = {
     },
 
     setDataFromJson: function(data) {
-       this._data = data;
+	   this._data = JSON.parse("\""+data+"\"");
     },
 
     getTaskById: function(id) {
@@ -37,7 +37,7 @@ task.ViewTask = function(taskId) {
 	};
 	
 	this.getTaskFromModel = function(){
-		var task = this._model.getTaskById(this._taskId);
+		var taskById = this._model.getTaskById(this._taskId);
 	};
 };
 
