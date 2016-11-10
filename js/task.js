@@ -27,31 +27,31 @@ task.modelTask.init(taskData);
 task.ViewTask = function(taskId) {
 	this._taskId = taskId;
 	this._model = task.modelTask;
-	this.elemTask = document.getElementById("task");
-	this.elemTaskNumber = this.elemTask.querySelector(".task_number");
-	this.elemTaskQuestion = this.elemTask.querySelector(".task_question");
-	this.elemAnswers = document.getElementById("answers");
+	this.elem = document.getElementById("task");
+	this.elemTaskNumber = this.elem.querySelector(".task-number");
+	this.elemTaskQuestion = this.elem.querySelector(".task-question");
+	this.elemTaskAnswers = document.getElementById("answers");
 	
 	this.renderTask = function(taskObj){
-		this.elemTaskNumber.innerHTML = '<p> Задача № '+taskObj.id+'.</p>';
-		this.elemTaskQuestion.innerHTML = '<p>'+taskObj.question+'</p>';
+		this.elemTaskNumber.innerText = 'Задача № '+taskObj.id+'.';
+		this.elemTaskQuestion.innerText = taskObj.question;
 		for(i = 0; i < taskObj.answers.length; i++){
-			this.li = document.createElement("li");
-			this.li.className = "radio";
+			elemListItem = document.createElement("li");
+			elemListItem.className = "radio";
 			
-			this.label = document.createElement("label");
+			elemLabel = document.createElement("label");
 									
-			this.input = document.createElement("input");
-			this.input.setAttribute("type","radio");
-			this.input.setAttribute("name","optionsRadios");
-			this.input.setAttribute("value",taskObj.answers[i].decision);
+			elemInput = document.createElement("input");
+			elemInput.setAttribute("type","radio");
+			elemInput.setAttribute("name","optionsRadios");
+			elemInput.setAttribute("value",taskObj.answers[i].decision);
 			
-			this.label.appendChild(this.input);			
-			this.label.insertAdjacentText("beforeEnd",taskObj.answers[i].decision);
+			elemLabel.appendChild(elemInput);			
+			elemLabel.insertAdjacentText("beforeEnd",taskObj.answers[i].decision);
 			
-			this.li.appendChild(this.label);
+			elemListItem.appendChild(elemLabel);
 			
-			this.elemAnswers.appendChild(this.li);
+			this.elemTaskAnswers.appendChild(elemListItem);
 		}
 	};
 	
