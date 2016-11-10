@@ -30,13 +30,15 @@ task.ViewTask = function(taskId) {
 	this.elemTask = document.getElementById("task");
 	this.elemTaskNumber = this.elemTask.querySelector(".task_number");
 	this.elemTaskQuestion = this.elemTask.querySelector(".task_question");
-	this.elemAnswers = document.querySelectorAll(".radio");
+	this.elemAnswers = document.querySelectorAll("label");
 	
 	this.renderTask = function(taskObj){
 		this.elemTaskNumber.innerHTML = '<p> Задача № '+taskObj.id+'.</p>';
 		this.elemTaskQuestion.innerHTML = '<p>'+taskObj.question+'</p>';
 		for(i = 0; i < this.elemAnswers.length; i++){
-			this.elemAnswers[i].innerHTML = '<label><input type="radio" name="optionsRadios" value="'+taskObj.answers[i].right+'" class="answer">'+taskObj.answers[i].decision+'</label>';
+			this.answerText = document.createElement("p");
+			this.answerText.innerHTML = taskObj.answers[i].decision;
+			this.elemAnswers[i].appendChild(this.answerText);
 		}
 	};
 	
@@ -46,5 +48,5 @@ task.ViewTask = function(taskId) {
 	};
 };
 
-var myTask=new task.ViewTask(2);
+var myTask=new task.ViewTask(1);
 myTask.getTaskFromModelById();
