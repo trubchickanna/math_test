@@ -61,11 +61,12 @@ task.ViewTask = function(taskId) {
 		this.renderTask(taskById);
 	};
 	
-	this.nextQuestion = function(){
-		alert("ok");
+	this.reRender = function(){
+		//alert(taskId);
+		var nextQ = this._model.getTaskById(this._taskId);
 	}
 	
-	this.elemNextQuestionButton.onclick = this.nextQuestion;
+	this.elemNextQuestionButton.onclick = this.reRender;
 };
 
 var myTask=new task.ViewTask(1);
