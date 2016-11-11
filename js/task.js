@@ -24,41 +24,39 @@ task.modelTask = {
 
 task.modelTask.init(taskData);
 
-task.ViewTask = function(taskId) {
-	this._taskId = taskId;
+task.ViewTask = function(id) {
 	this._model = task.modelTask;
+	this.currentTask = this._model.getTaskById(id);
 	this.elem = document.getElementById("task");
 	this.elemTaskNumber = this.elem.querySelector(".task-number");
 	this.elemTaskQuestion = this.elem.querySelector(".task-question");
 	this.elemTaskAnswers = document.getElementById("answers");
 	this.elemNextQuestionButton = document.getElementById("next-question-btn");
 	
+	this.init = function(){
+		this.renderTask(this.currentTask);
+	}
+	
 	this.renderTask = function(taskObj){
 		this.elemTaskNumber.innerText = 'Задача № '+taskObj.id+'.';
 		this.elemTaskQuestion.innerText = taskObj.question;
 		for(i = 0; i < taskObj.answers.length; i++){
 			elemListItem = document.createElement("li");
-			elemListItem.className = "radio";
-			
-			elemLabel = document.createElement("label");
-									
+			elemListItem.className = "radio";			
+			elemLabel = document.createElement("label");									
 			elemInput = document.createElement("input");
 			elemInput.setAttribute("type","radio");
 			elemInput.setAttribute("name","optionsRadios");
-			elemInput.setAttribute("value",taskObj.answers[i].decision);
-			
+			elemInput.setAttribute("value",taskObj.answers[i].decision);			
 			elemLabel.appendChild(elemInput);
-			elemLabel.insertAdjacentText("beforeEnd",taskObj.answers[i].decision);
-			
-			elemListItem.appendChild(elemLabel);
-			
+			elemLabel.insertAdjacentText("beforeEnd",taskObj.answers[i].decision);			
+			elemListItem.appendChild(elemLabel);			
 			this.elemTaskAnswers.appendChild(elemListItem);
 		}
 	};
 	
-	this.getTaskFromModelById = function(){
-		var taskById = this._model.getTaskById(this._taskId);
-		this.renderTask(taskById);
+	/*this.getTaskFromModelById = function(id){
+		return this._model.getTaskById(id);
 	};
 	
 	var self = this;
@@ -69,10 +67,12 @@ task.ViewTask = function(taskId) {
 		self._taskId = self._taskId + 1;
 		var nextQ = self._model.getTaskById(self._taskId);
 		self.renderTask(nextQ);
-	}	
+	}
 	
-	this.elemNextQuestionButton.onclick = this.reRender;
+	this.elemNextQuestionButton.addEventListener("click",this.reRender);*/
+	
+	this.init();
 };
 
-var myTask=new task.ViewTask(1);
-myTask.getTaskFromModelById();
+var myTask=new task.ViewTask(3);
+//myTask.getTaskFromModelById();
