@@ -31,6 +31,11 @@ task.ViewTask = function(taskId) {
 	this.elemTaskNumber = this.elem.querySelector(".task-number");
 	this.elemTaskQuestion = this.elem.querySelector(".task-question");
 	this.elemTaskAnswers = document.getElementById("answers");
+	this.elemNextQuestionButton = document.getElementById("next-question-btn");
+	
+	this.acceptAnswer = function(){
+		console.log("ok");
+	}
 	
 	this.renderTask = function(taskObj){
 		this.elemTaskNumber.innerText = 'Задача № '+taskObj.id+'.';
@@ -46,7 +51,8 @@ task.ViewTask = function(taskId) {
 			elemInput.setAttribute("name","optionsRadios");
 			elemInput.setAttribute("value",taskObj.answers[i].decision);
 			
-			elemLabel.appendChild(elemInput);			
+			elemLabel.appendChild(elemInput);
+			elemInput.onclick = this.acceptAnswer;
 			elemLabel.insertAdjacentText("beforeEnd",taskObj.answers[i].decision);
 			
 			elemListItem.appendChild(elemLabel);
