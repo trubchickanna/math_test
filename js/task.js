@@ -33,10 +33,6 @@ task.ViewTask = function(taskId) {
 	this.elemTaskAnswers = document.getElementById("answers");
 	this.elemNextQuestionButton = document.getElementById("next-question-btn");
 	
-	this.acceptAnswer = function(){
-		console.log("ok");
-	}
-	
 	this.renderTask = function(taskObj){
 		this.elemTaskNumber.innerText = 'Задача № '+taskObj.id+'.';
 		this.elemTaskQuestion.innerText = taskObj.question;
@@ -52,7 +48,6 @@ task.ViewTask = function(taskId) {
 			elemInput.setAttribute("value",taskObj.answers[i].decision);
 			
 			elemLabel.appendChild(elemInput);
-			elemInput.onclick = this.acceptAnswer;
 			elemLabel.insertAdjacentText("beforeEnd",taskObj.answers[i].decision);
 			
 			elemListItem.appendChild(elemLabel);
@@ -65,7 +60,13 @@ task.ViewTask = function(taskId) {
 		var taskById = this._model.getTaskById(this._taskId);
 		this.renderTask(taskById);
 	};
+	
+	this.nextQuestion = function(){
+		alert("ok");
+	}
+	
+	this.elemNextQuestionButton.onclick = this.nextQuestion;
 };
 
-var myTask=new task.ViewTask(2);
+var myTask=new task.ViewTask(1);
 myTask.getTaskFromModelById();
