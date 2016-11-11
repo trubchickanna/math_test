@@ -61,10 +61,15 @@ task.ViewTask = function(taskId) {
 		this.renderTask(taskById);
 	};
 	
+	var self = this;
 	this.reRender = function(){
-		//alert(taskId);
-		var nextQ = this._model.getTaskById(this._taskId);
-	}
+		while(self.elemTaskAnswers.firstChild){
+			self.elemTaskAnswers.removeChild(self.elemTaskAnswers.firstChild);
+		}
+		self._taskId = self._taskId + 1;
+		var nextQ = self._model.getTaskById(self._taskId);
+		self.renderTask(nextQ);
+	}	
 	
 	this.elemNextQuestionButton.onclick = this.reRender;
 };
