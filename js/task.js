@@ -21,9 +21,13 @@ task.modelTask = {
         }
     },
 	
-	getNextId: function(сurrentTask){
+	getNextTask: function(сurrentTask){
 		this.nextId = сurrentTask.id+1;
-		return this.nextId;
+		if (this.nextId <= this._data.length){
+			return this.getTaskById(this.nextId);
+		}else{
+			return false;
+		}
 	}
 };
 
@@ -66,15 +70,14 @@ task.ViewTask = function(id) {
 	};
 	
 	this.reRender = function(){
-		var nextId = this._model.getNextId(this.currentTask);
-		if (nextId <= this._model._data.length){
+		if (!this._model.getNextTask(this.currentTask)){
+			alert("Конец теста");
+		} else{
 			while(this.elemTaskAnswers.firstChild){
 				this.elemTaskAnswers.removeChild(this.elemTaskAnswers.firstChild);
 			}
-			this.currentTask = this._model.getTaskById(nextId);
+			this.currentTask = this._model.getNextTask(this.currentTask);
 			this.renderTask(this.currentTask);
-		} else{
-			alert("Конец теста");
 		}
 	}
 	
