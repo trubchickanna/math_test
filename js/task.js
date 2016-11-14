@@ -21,10 +21,16 @@ task.modelTask = {
         }
     },
 	
-	getNextTask: function(сurrentTask){
-		this.nextId = сurrentTask.id+1;
+	getNextTask: function(id){
+		this.nextId = id+1;
 		if (this.nextId <= this._data.length){
-			return this.getTaskById(this.nextId);
+			for(var i = 0; i < this._data.length; i++) {
+				for(var key in this._data[i]) {
+					if(key === 'id' && this._data[i][key] == this.nextId) {
+					   return this._data[i];
+					}
+				}
+			}
 		}else{
 			return false;
 		}
@@ -70,13 +76,13 @@ task.ViewTask = function(id) {
 	};
 	
 	this.reRender = function(){
-		if (!this._model.getNextTask(this.currentTask)){
+		if (!this._model.getNextTask(this.currentTask.id)){
 			alert("Конец теста");
 		} else{
 			while(this.elemTaskAnswers.firstChild){
 				this.elemTaskAnswers.removeChild(this.elemTaskAnswers.firstChild);
 			}
-			this.currentTask = this._model.getNextTask(this.currentTask);
+			this.currentTask = this._model.getNextTask(this.currentTask.id);
 			this.renderTask(this.currentTask);
 		}
 	}
