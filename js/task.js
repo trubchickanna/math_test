@@ -21,8 +21,9 @@ task.modelTask = {
         }
     },
 	
-	getNextId: function(id){
-		return this.nextId = id + 1;
+	getNextId: function(сurrentTask){
+		this.nextId = сurrentTask.id+1;
+		return this.nextId;
 	}
 };
 
@@ -65,14 +66,13 @@ task.ViewTask = function(id) {
 	};
 	
 	this.reRender = function(){
-		var nextTaskId = this._model.getNextId(id);
-		id = nextTaskId;
-		if (id <= this._model._data.length){
+		var nextId = this._model.getNextId(this.currentTask);
+		if (nextId <= this._model._data.length){
 			while(this.elemTaskAnswers.firstChild){
 				this.elemTaskAnswers.removeChild(this.elemTaskAnswers.firstChild);
 			}
-			var nextTask = this._model.getTaskById(id);
-			this.renderTask(nextTask);
+			this.currentTask = this._model.getTaskById(nextId);
+			this.renderTask(this.currentTask);
 		} else{
 			alert("Конец теста");
 		}
