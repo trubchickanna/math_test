@@ -2,6 +2,7 @@ var task = task || {};
 
 task.modelTask = {
     _data: null,
+	_nextId: null,
 	
 	init: function(data){
         this.setDataFromJson(data);
@@ -22,17 +23,9 @@ task.modelTask = {
     },
 	
 	getNextTask: function(id){
-		this.nextId = id+1;
-		if (this.nextId <= this._data.length){
-			for(var i = 0; i < this._data.length; i++) {
-				for(var key in this._data[i]) {
-					if(key === 'id' && this._data[i][key] == this.nextId) {
-					   return this._data[i];
-					}
-				}
-			}
-		}else{
-			return false;
+		id++;
+		if (id <= this._data.length){
+			return this.getTaskById(id);
 		}
 	}
 };
@@ -47,6 +40,7 @@ task.ViewTask = function(id) {
 	this.elemTaskQuestion = this.elem.querySelector(".task-question");
 	this.elemTaskAnswers = document.getElementById("answers");
 	this.elemNextQuestionButton = document.getElementById("next-question-btn");
+	this.currentTaskId = id;
 	var self = this;
 	
 	this.init = function(){
@@ -76,13 +70,14 @@ task.ViewTask = function(id) {
 	};
 	
 	this.reRender = function(){
-		if (!this._model.getNextTask(this.currentTask.id)){
+		if (!this._model.getNextTask(this.currentTaskId)){
 			alert("Конец теста");
 		} else{
 			while(this.elemTaskAnswers.firstChild){
 				this.elemTaskAnswers.removeChild(this.elemTaskAnswers.firstChild);
 			}
-			this.currentTask = this._model.getNextTask(this.currentTask.id);
+			this.currentTask = this._model.getNextTask(this.currentTaskId);
+			this.currentTaskId = this.currentTask.id;
 			this.renderTask(this.currentTask);
 		}
 	}
