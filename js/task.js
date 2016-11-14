@@ -19,7 +19,11 @@ task.modelTask = {
                 }
             }
         }
-    }
+    },
+	
+	getNextId: function(id){
+		return this.nextId = id + 1;
+	}
 };
 
 task.modelTask.init(taskData);
@@ -61,16 +65,20 @@ task.ViewTask = function(id) {
 	};
 	
 	this.reRender = function(){
-		while(this.elemTaskAnswers.firstChild){
-			this.elemTaskAnswers.removeChild(this.elemTaskAnswers.firstChild);
+		var nextTaskId = this._model.getNextId(id);
+		id = nextTaskId;
+		if (id <= this._model._data.length){
+			while(this.elemTaskAnswers.firstChild){
+				this.elemTaskAnswers.removeChild(this.elemTaskAnswers.firstChild);
+			}
+			var nextTask = this._model.getTaskById(id);
+			this.renderTask(nextTask);
+		} else{
+			alert("Конец теста");
 		}
-		id = id + 1;
-		var nextTask = this._model.getTaskById(id);
-		this.renderTask(nextTask);
 	}
 	
 	this.init();
 };
 
 var myTask=new task.ViewTask(1);
-//myTask.getTaskFromModelById();
