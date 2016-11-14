@@ -32,9 +32,14 @@ task.ViewTask = function(id) {
 	this.elemTaskQuestion = this.elem.querySelector(".task-question");
 	this.elemTaskAnswers = document.getElementById("answers");
 	this.elemNextQuestionButton = document.getElementById("next-question-btn");
+	var self = this;
 	
 	this.init = function(){
 		this.renderTask(this.currentTask);
+		
+		this.elemNextQuestionButton.addEventListener("click",function(){
+			self.reRender();
+		});
 	}
 	
 	this.renderTask = function(taskObj){
@@ -55,24 +60,17 @@ task.ViewTask = function(id) {
 		}
 	};
 	
-	/*this.getTaskFromModelById = function(id){
-		return this._model.getTaskById(id);
-	};
-	
-	var self = this;
 	this.reRender = function(){
-		while(self.elemTaskAnswers.firstChild){
-			self.elemTaskAnswers.removeChild(self.elemTaskAnswers.firstChild);
+		while(this.elemTaskAnswers.firstChild){
+			this.elemTaskAnswers.removeChild(this.elemTaskAnswers.firstChild);
 		}
-		self._taskId = self._taskId + 1;
-		var nextQ = self._model.getTaskById(self._taskId);
-		self.renderTask(nextQ);
+		id = id + 1;
+		var nextTask = this._model.getTaskById(id);
+		this.renderTask(nextTask);
 	}
-	
-	this.elemNextQuestionButton.addEventListener("click",this.reRender);*/
 	
 	this.init();
 };
 
-var myTask=new task.ViewTask(3);
+var myTask=new task.ViewTask(1);
 //myTask.getTaskFromModelById();
