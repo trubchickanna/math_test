@@ -79,7 +79,7 @@ task.ViewTask = function(id) {
 			elemInput = document.createElement("input");
 			elemInput.setAttribute("type","radio");
 			elemInput.setAttribute("name","optionsRadios");
-			elemInput.setAttribute("value",taskObj.answers[key]);			
+			elemInput.setAttribute("value",taskObj.answers[key]);
 			elemLabel.appendChild(elemInput);
 			elemLabel.insertAdjacentText("beforeEnd",taskObj.answers[key]);			
 			elemListItem.appendChild(elemLabel);			
@@ -106,6 +106,17 @@ task.ViewTask = function(id) {
 var myTask=new task.ViewTask(1);
 
 function Answer(){
-	var userAnswers = {};
-	userAnswers["taskId"] = "answerId";//добавление ответов пользователя
+	var listInput = document.querySelectorAll("input[name='optionsRadios']");
+	var button = document.getElementById("next-question-btn");
+	var a = 0;
+	for (i = 0; i < listInput.length; i++){
+		if (!listInput[i].hasAttribute('checked')){
+			a++;
+		}
+	};
+	if (a!=0){
+		button.setAttribute("disabled","disabled");
+	}
 };
+
+var ans = new Answer();
