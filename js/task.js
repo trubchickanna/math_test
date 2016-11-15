@@ -3,13 +3,25 @@ var task = task || {};
 task.modelTask = {
     _data: null,
 	_nextId: null,
+	_userAnswer: null,
 	
 	init: function(data){
-        this.setDataFromJson(data);
+        var xhr = new XMLHttpRequest();
+		var taskData;
+		xhr.open('GET', '../json/taskData.json', false);
+		xhr.send();
+		
+		if (xhr.status != 200) {
+			alert('Ошибка ' + xhr.status + ': ' + xhr.statusText);
+		} else {
+			console.log(xhr);
+			taskData = JSON.parse(JSON.stringify(xhr.responseText).replace(/\\n/g,"\\n"));
+			this.setDataFromJson(taskData);
+		}
     },
 
     setDataFromJson: function(data) {
-	   this._data = data;
+	   this._data = JSON.parse(data);
     },
 
     getTaskById: function(id) {
@@ -31,18 +43,14 @@ task.modelTask = {
 		if (this._nextId <= this._data.length){
 			return this.getTaskById(this._nextId);
 		}
+	},
+	
+	setUserAnswer: function(){
+		console.log("ok");
 	}
 };
 
-var xhr = new XMLHttpRequest();
-xhr.open('GET', 'json/taskData.json', false);
-xhr.send();
-if (xhr.status != 200) {
-	alert('Ошибка ' + xhr.status + ': ' + xhr.statusText);
-} else {
-	var object = eval("("+xhr.responseText+")");
-	task.modelTask.init(object);
-}
+task.modelTask.init();
 
 task.ViewTask = function(id) {
 	this._model = task.modelTask;
@@ -74,6 +82,9 @@ task.ViewTask = function(id) {
 			elemLabel = document.createElement("label");									
 			elemInput = document.createElement("input");
 			elemInput.setAttribute("type","radio");
+			elemInput.addEventListener("click",function(){
+				self._model.setUserAnswer();
+			});
 			elemInput.setAttribute("name","optionsRadios");
 			elemInput.setAttribute("value",taskObj.answers[i].decision);			
 			elemLabel.appendChild(elemInput);

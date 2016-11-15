@@ -9,7 +9,7 @@ var file = new static.Server('.', {
 
 function accept(req, res) {
 
-  if (req.url == 'json/taskData.json') {
+  if (req.url == '../json/taskData.json') {
     // искусственная задержка для наглядности
     setTimeout(function() {
       file.serve(req, res);
