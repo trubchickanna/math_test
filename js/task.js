@@ -9,28 +9,40 @@ task.modelTask = {
     },
 
     setDataFromJson: function(data) {
-	   this._data = JSON.parse(data);
+	   this._data = data;
     },
 
     getTaskById: function(id) {
-        for(var i = 0; i < this._data.length; i++) {
-            for(var key in this._data[i]) {
-                if(key === 'id' && this._data[i][key] == id) {
-                   return this._data[i];
-                }
-            }
-        }
-    },
+        if (id <= this._data.length){
+			for(var i = 0; i < this._data.length; i++) {
+				for(var key in this._data[i]) {
+					if(key === 'id' && this._data[i][key] == id) {
+					   return this._data[i];
+					}
+				}
+			}
+		} else{
+			return;
+		}
+	},
 	
 	getNextTask: function(id){
-		id++;
-		if (id <= this._data.length){
-			return this.getTaskById(id);
+		this._nextId = ++id;
+		if (this._nextId <= this._data.length){
+			return this.getTaskById(this._nextId);
 		}
 	}
 };
 
-task.modelTask.init(taskData);
+var xhr = new XMLHttpRequest();
+xhr.open('GET', 'json/taskData.json', false);
+xhr.send();
+if (xhr.status != 200) {
+	alert('Ошибка ' + xhr.status + ': ' + xhr.statusText);
+} else {
+	var object = eval("("+xhr.responseText+")");
+	task.modelTask.init(object);
+}
 
 task.ViewTask = function(id) {
 	this._model = task.modelTask;
@@ -44,7 +56,9 @@ task.ViewTask = function(id) {
 	var self = this;
 	
 	this.init = function(){
-		this.renderTask(this.currentTask);
+		if (this.currentTask != undefined){
+			this.renderTask(this.currentTask);
+		}
 		
 		this.elemNextQuestionButton.addEventListener("click",function(){
 			self.reRender();
