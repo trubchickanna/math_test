@@ -116,8 +116,14 @@ task.ViewTask = function(id) {
 
 var myTask=new task.ViewTask(1);
 
-function Answer(questionId,answerId){	
+var answersObj = {};
+function Answer(questionId,answerId){
 	if (questionId != undefined && answerId != undefined){
-		console.log(questionId+":"+answerId);
+		function addAnswer(queId,ansId){
+			ansId = Number(ansId);
+			answersObj[queId] = ansId;
+			console.log(answersObj);
+		}
+		addAnswer(questionId,answerId);
 	}
 };
