@@ -14,7 +14,6 @@ task.modelTask = {
 		if (xhr.status != 200) {
 			alert('Ошибка ' + xhr.status + ': ' + xhr.statusText);
 		} else {
-			console.log(xhr);
 			taskData = JSON.parse(JSON.stringify(xhr.responseText).replace(/\\n/g,"\\n"));
 			this.setDataFromJson(taskData);
 		}
@@ -57,6 +56,8 @@ task.ViewTask = function(id) {
 	this.elemTaskAnswers = document.getElementById("answers");
 	this.elemNextQuestionButton = document.getElementById("next-question-btn");
 	this.currentTaskId = id;
+	var taskId = null;
+	var ansId = null;
 	var self = this;
 	
 	this.init = function(){
@@ -66,12 +67,16 @@ task.ViewTask = function(id) {
 		
 		this.elemNextQuestionButton.addEventListener("click",function(){
 			self.reRender();
+			userAnswer = Answer (taskId,ansId);
 		});
+		
+		var userAnswers = new Answer();
 	}
 	
 	this.renderTask = function(taskObj){
 		this.elemTaskNumber.innerText = 'Задача № '+taskObj.id+'.';
 		this.elemTaskQuestion.innerText = taskObj.question;
+		var a = null;
 		for(var key in taskObj.answers){
 			elemListItem = document.createElement("li");
 			elemListItem.className = "radio";			
@@ -79,7 +84,12 @@ task.ViewTask = function(id) {
 			elemInput = document.createElement("input");
 			elemInput.setAttribute("type","radio");
 			elemInput.setAttribute("name","optionsRadios");
-			elemInput.setAttribute("value",taskObj.answers[key]);
+			elemInput.setAttribute("value",key);
+			elemInput.addEventListener("click",function(){
+				self.elemNextQuestionButton.removeAttribute("disabled");
+				ansId = this.value;
+				taskId = taskObj.id;
+			});
 			elemLabel.appendChild(elemInput);
 			elemLabel.insertAdjacentText("beforeEnd",taskObj.answers[key]);			
 			elemListItem.appendChild(elemLabel);			
@@ -97,6 +107,7 @@ task.ViewTask = function(id) {
 			this.currentTask = this._model.getNextTask(this.currentTaskId);
 			this.currentTaskId = this.currentTask.id;
 			this.renderTask(this.currentTask);
+			this.elemNextQuestionButton.setAttribute("disabled","disabled");
 		}
 	}
 	
@@ -105,18 +116,8 @@ task.ViewTask = function(id) {
 
 var myTask=new task.ViewTask(1);
 
-function Answer(){
-	var listInput = document.querySelectorAll("input[name='optionsRadios']");
-	var button = document.getElementById("next-question-btn");
-	var a = 0;
-	for (i = 0; i < listInput.length; i++){
-		if (!listInput[i].hasAttribute('checked')){
-			a++;
-		}
-	};
-	if (a!=0){
-		button.setAttribute("disabled","disabled");
+function Answer(questionId,answerId){	
+	if (questionId != undefined && answerId != undefined){
+		console.log(questionId+":"+answerId);
 	}
 };
-
-var ans = new Answer();

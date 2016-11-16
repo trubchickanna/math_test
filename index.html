@@ -6,19 +6,25 @@
 		<link rel="stylesheet" type="text/css" href="lib/bootstrap/dist/css/bootstrap-theme.min.css">
 	</head>
 	<body>
-		<div class="panel panel-default" id="task">
-		  <div class="panel-heading">
-			<h4 id="task-number" class="task-number">
-			</h4>
-		  </div>
-		  <div class="panel-body">
-			<p id="task-question" class="task-question">
-			</p>
-		  </div>
+		<div class="container-fluid">
+		  <div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default" id="task">
+				  <div class="panel-heading">
+					<h4 id="task-number" class="task-number">
+					</h4>
+				  </div>
+				  <div class="panel-body">
+					<p id="task-question" class="task-question">
+					</p>
+				  </div>
+				</div>
+				<ul class="list-unstyled" id="answers">
+				</ul>
+				<button type="button" class="btn btn-primary" id="next-question-btn" disabled="disabled">Следующий вопрос</button>
+				</div>
+			</div>
 		</div>
-		<ul class="list-unstyled" id="answers">
-		</ul>
-		<button type="button" class="btn btn-primary" id="next-question-btn">Следующий вопрос</button>
 		<script src="lib/jquery/dist/jquery.min.js">
 		</script>
 		<script src="lib/bootstrap/dist/js/bootstrap.min.js">
