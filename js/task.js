@@ -67,10 +67,9 @@ task.ViewTask = function(id) {
 		
 		this.elemNextQuestionButton.addEventListener("click",function(){
 			self.reRender();
-			userAnswer = Answer (taskId,ansId);
+			answersUser.setAnswer(taskId,ansId);
+			console.log(answersUser._answersArr);
 		});
-		
-		var userAnswers = new Answer();
 	}
 	
 	this.renderTask = function(taskObj){
@@ -88,6 +87,7 @@ task.ViewTask = function(id) {
 			elemInput.addEventListener("click",function(){
 				self.elemNextQuestionButton.removeAttribute("disabled");
 				ansId = this.value;
+				ansId = Number(ansId);
 				taskId = taskObj.id;
 			});
 			elemLabel.appendChild(elemInput);
@@ -116,8 +116,15 @@ task.ViewTask = function(id) {
 
 var myTask=new task.ViewTask(1);
 
-var answersObj = {};
-function Answer(questionId,answerId){
+answersUser = {
+	_answersArr:[],
+	setAnswer: function (qId,aId){
+		var answ = {};
+		answ[qId] = aId;
+		this._answersArr.push(answ);
+	}
+};
+/*function Answer(questionId,answerId){
 	if (questionId != undefined && answerId != undefined){
 		function addAnswer(queId,ansId){
 			ansId = Number(ansId);
@@ -126,4 +133,4 @@ function Answer(questionId,answerId){
 		}
 		addAnswer(questionId,answerId);
 	}
-};
+};*/
