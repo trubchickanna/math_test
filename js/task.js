@@ -58,6 +58,7 @@ task.ViewTask = function(id) {
 	this.currentTaskId = id;
 	var taskId = null;
 	var ansId = null;
+	this.page = document.getElementById("page");
 	var self = this;
 	
 	this.init = function(){
@@ -66,9 +67,8 @@ task.ViewTask = function(id) {
 		}
 		
 		this.elemNextQuestionButton.addEventListener("click",function(){
-			self.reRender();
 			answersUser.setAnswer(taskId,ansId);
-			console.log(answersUser._answersArr);
+			self.reRender();
 		});
 	}
 	
@@ -99,7 +99,10 @@ task.ViewTask = function(id) {
 	
 	this.reRender = function(){
 		if (!this._model.getNextTask(this.currentTaskId)){
-			alert("Конец теста");
+			while(this.page.firstChild){
+				this.page.removeChild(page.firstChild);
+			}
+			this.page.innerHTML = answersUser.getAnswersUser();
 		} else{
 			while(this.elemTaskAnswers.firstChild){
 				this.elemTaskAnswers.removeChild(this.elemTaskAnswers.firstChild);
@@ -108,8 +111,11 @@ task.ViewTask = function(id) {
 			this.currentTaskId = this.currentTask.id;
 			this.renderTask(this.currentTask);
 			this.elemNextQuestionButton.setAttribute("disabled","disabled");
+			if (this.currentTaskId = this._model._data.length){
+				this.elemNextQuestionButton.innerText = "Закончить тест";
+			}
 		}
-	}
+	};
 	
 	this.init();
 };
@@ -118,19 +124,20 @@ var myTask=new task.ViewTask(1);
 
 answersUser = {
 	_answersArr:[],
+	
 	setAnswer: function (qId,aId){
 		var answ = {};
 		answ[qId] = aId;
 		this._answersArr.push(answ);
+	},
+	
+	getAnswersUser: function(){
+		var str = "";
+		for (i = 0; i < this._answersArr.length; i++){
+			for (var key in this._answersArr[i]){
+				str += key +":"+this._answersArr[i][key]+"<br>";
+			}
+		}
+		return str;
 	}
 };
-/*function Answer(questionId,answerId){
-	if (questionId != undefined && answerId != undefined){
-		function addAnswer(queId,ansId){
-			ansId = Number(ansId);
-			answersObj[queId] = ansId;
-			console.log(answersObj);
-		}
-		addAnswer(questionId,answerId);
-	}
-};*/
