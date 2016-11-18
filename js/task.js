@@ -56,7 +56,6 @@ task.ViewTask = function(id) {
 	this.elemTaskAnswers = document.getElementById("answers");
 	this.elemNextQuestionButton = document.getElementById("next-question-btn");
 	this.currentTaskId = id;
-	this._data = this._model._data;
 	var taskId = null;
 	var ansId = null;
 	this.page = document.getElementById("page");
@@ -74,6 +73,9 @@ task.ViewTask = function(id) {
 	}
 	
 	this.renderTask = function(taskObj){
+		if (taskObj.id === this._model._data.length){
+			this.elemNextQuestionButton.innerText = "Завершить тест";
+		}
 		this.elemTaskNumber.innerText = 'Задача № '+taskObj.id+'.';
 		this.elemTaskQuestion.innerText = taskObj.question;
 		for(var key in taskObj.answers){
@@ -97,7 +99,7 @@ task.ViewTask = function(id) {
 		}
 	};
 	
-	this.renderLastPage = function(){
+	this.renderResults = function(){
 		this.elemTaskNumber.innerText = "Результат";
 		this.elemTaskQuestion.innerHTML = answersUser.getAnswersUser();
 		this.elemNextQuestionButton.remove();
@@ -108,7 +110,7 @@ task.ViewTask = function(id) {
 			while(this.elemTaskAnswers.firstChild){
 				this.elemTaskAnswers.removeChild(this.elemTaskAnswers.firstChild);
 			}
-			this.renderLastPage();
+			this.renderResults();
 		} else{
 			while(this.elemTaskAnswers.firstChild){
 				this.elemTaskAnswers.removeChild(this.elemTaskAnswers.firstChild);
@@ -136,11 +138,18 @@ answersUser = {
 	
 	getAnswersUser: function(){
 		var str = "";
+		var correctAnswersUser = 0;
 		for (i = 0; i < this._answersArr.length; i++){
 			for (var key in this._answersArr[i]){
-				str += key +":"+this._answersArr[i][key]+"<br>";
+				if (this._answersArr[i][key] === task.modelTask._data[i].correctAnswer){
+					str += key + ": правильно<br>";
+					correctAnswersUser++;
+				} else{
+					str += key + ": ошибка<br>";
+				}
 			}
 		}
+		str += "Вы ответили правильно на " + correctAnswersUser + " из " + task.modelTask._data.length + " вопросов.";
 		return str;
 	}
 };
