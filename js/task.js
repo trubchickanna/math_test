@@ -28,7 +28,7 @@ task.modelTask = {
 			for(var i = 0; i < this._data.length; i++) {
 				for(var key in this._data[i]) {
 					if(key === 'id' && this._data[i][key] == id) {
-					   return this._data[i];
+						return this._data[i];
 					}
 				}
 			}
@@ -56,6 +56,7 @@ task.ViewTask = function(id) {
 	this.elemTaskAnswers = document.getElementById("answers");
 	this.elemNextQuestionButton = document.getElementById("next-question-btn");
 	this.currentTaskId = id;
+	this._data = this._model._data;
 	var taskId = null;
 	var ansId = null;
 	this.page = document.getElementById("page");
@@ -111,9 +112,6 @@ task.ViewTask = function(id) {
 			this.currentTaskId = this.currentTask.id;
 			this.renderTask(this.currentTask);
 			this.elemNextQuestionButton.setAttribute("disabled","disabled");
-			if (this.currentTaskId = this._model._data.length){
-				this.elemNextQuestionButton.innerText = "Закончить тест";
-			}
 		}
 	};
 	
