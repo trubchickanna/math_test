@@ -76,7 +76,6 @@ task.ViewTask = function(id) {
 	this.renderTask = function(taskObj){
 		this.elemTaskNumber.innerText = 'Задача № '+taskObj.id+'.';
 		this.elemTaskQuestion.innerText = taskObj.question;
-		var a = null;
 		for(var key in taskObj.answers){
 			elemListItem = document.createElement("li");
 			elemListItem.className = "radio";			
@@ -98,12 +97,18 @@ task.ViewTask = function(id) {
 		}
 	};
 	
+	this.renderLastPage = function(){
+		this.elemTaskNumber.innerText = "Результат";
+		this.elemTaskQuestion.innerHTML = answersUser.getAnswersUser();
+		this.elemNextQuestionButton.remove();
+	};
+	
 	this.reRender = function(){
 		if (!this._model.getNextTask(this.currentTaskId)){
-			while(this.page.firstChild){
-				this.page.removeChild(page.firstChild);
+			while(this.elemTaskAnswers.firstChild){
+				this.elemTaskAnswers.removeChild(this.elemTaskAnswers.firstChild);
 			}
-			this.page.innerHTML = answersUser.getAnswersUser();
+			this.renderLastPage();
 		} else{
 			while(this.elemTaskAnswers.firstChild){
 				this.elemTaskAnswers.removeChild(this.elemTaskAnswers.firstChild);
