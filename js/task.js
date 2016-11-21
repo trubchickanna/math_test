@@ -1,3 +1,5 @@
+"use strict";
+
 var task = task || {};
 
 task.modelTask = {
@@ -51,7 +53,7 @@ task.ViewTask = function(id) {
 	this._model = task.modelTask;
 	this.currentTask = this._model.getTaskById(id);
 	this.elem = document.getElementById("task");
-	this.elemTaskNumber = this.elem.querySelector(".task-number");
+	this.elemTaskTitle = this.elem.querySelector(".task-title");
 	this.elemTaskQuestion = this.elem.querySelector(".task-question");
 	this.elemTaskAnswers = document.getElementById("answers");
 	this.elemNextQuestionButton = document.getElementById("next-question-btn");
@@ -76,13 +78,13 @@ task.ViewTask = function(id) {
 		if (taskObj.id === this._model._data.length){
 			this.elemNextQuestionButton.innerText = "Завершить тест";
 		}
-		this.elemTaskNumber.innerText = 'Задача № '+taskObj.id+'.';
+		this.elemTaskTitle.innerText = 'Задача № '+taskObj.id+'.';
 		this.elemTaskQuestion.innerText = taskObj.question;
 		for(var key in taskObj.answers){
-			elemListItem = document.createElement("li");
+			var elemListItem = document.createElement("li");
 			elemListItem.className = "radio";			
-			elemLabel = document.createElement("label");									
-			elemInput = document.createElement("input");
+			var elemLabel = document.createElement("label");									
+			var elemInput = document.createElement("input");
 			elemInput.setAttribute("type","radio");
 			elemInput.setAttribute("name","optionsRadios");
 			elemInput.setAttribute("value",key);
@@ -100,7 +102,7 @@ task.ViewTask = function(id) {
 	};
 	
 	this.renderResults = function(){
-		this.elemTaskNumber.innerText = "Результат";
+		this.elemTaskTitle.innerText = "Результат";
 		this.elemTaskQuestion.innerHTML = answersUser.getAnswersUser();
 		this.elemNextQuestionButton.remove();
 	};
@@ -127,7 +129,7 @@ task.ViewTask = function(id) {
 
 var myTask=new task.ViewTask(1);
 
-answersUser = {
+var answersUser = {
 	_answersArr:[],
 	
 	setAnswer: function (qId,aId){
@@ -137,19 +139,22 @@ answersUser = {
 	},
 	
 	getAnswersUser: function(){
-		var str = "";
 		var correctAnswersUser = 0;
-		for (i = 0; i < this._answersArr.length; i++){
+		var str = "";
+		var idAnswerUser;
+		for (var i = 0; i < this._answersArr.length; i++){
 			for (var key in this._answersArr[i]){
 				if (this._answersArr[i][key] === task.modelTask._data[i].correctAnswer){
-					str += key + ": правильно<br>";
+					idAnswerUser = this._answersArr[i][key];
+					str += "<p style='color:green;'>" + key + ". " + task.modelTask._data[i].question + " Ваш ответ: " + task.modelTask._data[i].answers[idAnswerUser] + "</p>";
 					correctAnswersUser++;
 				} else{
-					str += key + ": ошибка<br>";
+					idAnswerUser = this._answersArr[i][key];
+					str += "<p style='color:red;'>" + key + ". " + task.modelTask._data[i].question + " Ваш ответ: " + task.modelTask._data[i].answers[idAnswerUser] + "</p>";
 				}
 			}
 		}
-		str += "Вы ответили правильно на " + correctAnswersUser + " из " + task.modelTask._data.length + " вопросов.";
+		str += "<p>Вы ответили правильно на " + correctAnswersUser + " из " + task.modelTask._data.length + " вопросов.</p>";
 		return str;
 	}
 };
