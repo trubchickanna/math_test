@@ -44,6 +44,26 @@ task.modelTask = {
 		if (this._nextId <= this._data.length){
 			return this.getTaskById(this._nextId);
 		}
+	},
+	
+	comparisonAnswersUser: function(){
+		var correctAnswersUser = 0;
+		var str = "";
+		var idAnswerUser;
+		for (var i = 0; i < answersUser._answersArr.length; i++){
+			for (var key in answersUser._answersArr[i]){
+				if (answersUser._answersArr[i][key] === this._data[i].correctAnswer){
+					idAnswerUser = answersUser._answersArr[i][key];
+					str += "<p style='color:green;'>" + key + ". " + this._data[i].question + " Ваш ответ: " + this._data[i].answers[idAnswerUser] + "</p>";
+					correctAnswersUser++;
+				} else{
+					idAnswerUser = answersUser._answersArr[i][key];
+					str += "<p style='color:red;'>" + key + ". " + this._data[i].question + " Ваш ответ: " + this._data[i].answers[idAnswerUser] + "</p>";
+				}
+			}
+		}
+		str += "<p>Вы ответили правильно на " + correctAnswersUser + " из " + task.modelTask._data.length + " вопросов.</p>";
+		return str;
 	}
 };
 
@@ -72,7 +92,7 @@ task.ViewTask = function(id) {
 			answersUser.setAnswer(taskId,ansId);
 			self.reRender();
 		});
-	}
+	};
 	
 	this.renderTask = function(taskObj){
 		if (taskObj.id === this._model._data.length){
@@ -103,7 +123,22 @@ task.ViewTask = function(id) {
 	
 	this.renderResults = function(){
 		this.elemTaskTitle.innerText = "Результат";
-		this.elemTaskQuestion.innerHTML = answersUser.getAnswersUser();
+		var correctAnswersUser = 0;
+		var str = "";
+		var idAnswerUser;
+		for (var i = 0; i < answersUser._answersArr.length; i++){
+			for (var key in answersUser._answersArr[i]){
+				idAnswerUser = answersUser._answersArr[i][key];
+				if (answersUser.comparisonAnswersUser(i,idAnswerUser) === true){
+					str += "<p style='color:green;'>" + key + ". " + this._model._data[i].question + " Ваш ответ: " + this._model._data[i].answers[idAnswerUser] + "</p>";
+					correctAnswersUser++;
+				} else{
+					str += "<p style='color:red;'>" + key + ". " + this._model._data[i].question + " Ваш ответ: " + this._model._data[i].answers[idAnswerUser] + "</p>";
+				}
+			}
+		}
+		str += "<p>Вы ответили правильно на " + correctAnswersUser + " из " + task.modelTask._data.length + " вопросов.</p>";
+		this.elemTaskQuestion.innerHTML = str;
 		this.elemNextQuestionButton.remove();
 	};
 	
@@ -138,23 +173,11 @@ var answersUser = {
 		this._answersArr.push(answ);
 	},
 	
-	getAnswersUser: function(){
-		var correctAnswersUser = 0;
-		var str = "";
-		var idAnswerUser;
-		for (var i = 0; i < this._answersArr.length; i++){
-			for (var key in this._answersArr[i]){
-				if (this._answersArr[i][key] === task.modelTask._data[i].correctAnswer){
-					idAnswerUser = this._answersArr[i][key];
-					str += "<p style='color:green;'>" + key + ". " + task.modelTask._data[i].question + " Ваш ответ: " + task.modelTask._data[i].answers[idAnswerUser] + "</p>";
-					correctAnswersUser++;
-				} else{
-					idAnswerUser = this._answersArr[i][key];
-					str += "<p style='color:red;'>" + key + ". " + task.modelTask._data[i].question + " Ваш ответ: " + task.modelTask._data[i].answers[idAnswerUser] + "</p>";
-				}
-			}
+	comparisonAnswersUser: function(q,a){
+		if (a === task.modelTask._data[q].correctAnswer){
+			return true;
+		} else {
+			return false;
 		}
-		str += "<p>Вы ответили правильно на " + correctAnswersUser + " из " + task.modelTask._data.length + " вопросов.</p>";
-		return str;
 	}
 };
