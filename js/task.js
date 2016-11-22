@@ -74,6 +74,7 @@ task.ViewTask = function(id) {
 	};
 	
 	this.renderTask = function(taskObj){
+		console.log(taskObj);
 		if (taskObj.id === this._model._data.length){
 			this.elemNextQuestionButton.innerText = "Завершить тест";
 		}
@@ -96,27 +97,8 @@ task.ViewTask = function(id) {
 			elemLabel.appendChild(elemInput);
 			elemLabel.insertAdjacentText("beforeEnd",taskObj.answers[key]);			
 			elemListItem.appendChild(elemLabel);			
-			self.elemTaskAnswers.appendChild(elemListItem);
-		});
-		/*for(var key in taskObj.answers){
-			var elemListItem = document.createElement("li");
-			elemListItem.className = "radio";			
-			var elemLabel = document.createElement("label");									
-			var elemInput = document.createElement("input");
-			elemInput.setAttribute("type","radio");
-			elemInput.setAttribute("name","optionsRadios");
-			elemInput.setAttribute("value",key);
-			elemInput.addEventListener("click",function(){
-				self.elemNextQuestionButton.removeAttribute("disabled");
-				ansId = this.value;
-				ansId = Number(ansId);
-				taskId = taskObj.id;
-			});
-			elemLabel.appendChild(elemInput);
-			elemLabel.insertAdjacentText("beforeEnd",taskObj.answers[key]);			
-			elemListItem.appendChild(elemLabel);			
 			this.elemTaskAnswers.appendChild(elemListItem);
-		}*/
+		},this);
 	};
 	
 	this.renderResults = function(){
@@ -125,7 +107,7 @@ task.ViewTask = function(id) {
 		var str = "";
 		var idAnswerUser;
 		for (var i = 0; i < answersUser._answersArr.length; i++){
-			for (var key in answersUser._answersArr[i]){
+			_.each(answersUser._answersArr[i],function(num,key){
 				idAnswerUser = answersUser._answersArr[i][key];
 				if (answersUser.comparisonAnswersUser(i,idAnswerUser) === true){
 					str += "<p style='color:green;'>" + key + ". " + this._model._data[i].question + " Ваш ответ: " + this._model._data[i].answers[idAnswerUser] + "</p>";
@@ -133,7 +115,7 @@ task.ViewTask = function(id) {
 				} else{
 					str += "<p style='color:red;'>" + key + ". " + this._model._data[i].question + " Ваш ответ: " + this._model._data[i].answers[idAnswerUser] + "</p>";
 				}
-			}
+			},this);
 		}
 		str += "<p>Вы ответили правильно на " + correctAnswersUser + " из " + task.modelTask._data.length + " вопросов.</p>";
 		this.elemTaskQuestion.innerHTML = str;
