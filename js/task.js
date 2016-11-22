@@ -44,26 +44,6 @@ task.modelTask = {
 		if (this._nextId <= this._data.length){
 			return this.getTaskById(this._nextId);
 		}
-	},
-	
-	comparisonAnswersUser: function(){
-		var correctAnswersUser = 0;
-		var str = "";
-		var idAnswerUser;
-		for (var i = 0; i < answersUser._answersArr.length; i++){
-			for (var key in answersUser._answersArr[i]){
-				if (answersUser._answersArr[i][key] === this._data[i].correctAnswer){
-					idAnswerUser = answersUser._answersArr[i][key];
-					str += "<p style='color:green;'>" + key + ". " + this._data[i].question + " Ваш ответ: " + this._data[i].answers[idAnswerUser] + "</p>";
-					correctAnswersUser++;
-				} else{
-					idAnswerUser = answersUser._answersArr[i][key];
-					str += "<p style='color:red;'>" + key + ". " + this._data[i].question + " Ваш ответ: " + this._data[i].answers[idAnswerUser] + "</p>";
-				}
-			}
-		}
-		str += "<p>Вы ответили правильно на " + correctAnswersUser + " из " + task.modelTask._data.length + " вопросов.</p>";
-		return str;
 	}
 };
 
@@ -80,7 +60,6 @@ task.ViewTask = function(id) {
 	this.currentTaskId = id;
 	var taskId = null;
 	var ansId = null;
-	this.page = document.getElementById("page");
 	var self = this;
 	
 	this.init = function(){
@@ -100,7 +79,26 @@ task.ViewTask = function(id) {
 		}
 		this.elemTaskTitle.innerText = 'Задача № '+taskObj.id+'.';
 		this.elemTaskQuestion.innerText = taskObj.question;
-		for(var key in taskObj.answers){
+		_.each(taskObj.answers,function(num,key){
+			var elemListItem = document.createElement("li");
+			elemListItem.className = "radio";			
+			var elemLabel = document.createElement("label");									
+			var elemInput = document.createElement("input");
+			elemInput.setAttribute("type","radio");
+			elemInput.setAttribute("name","optionsRadios");
+			elemInput.setAttribute("value",key);
+			elemInput.addEventListener("click",function(){
+				self.elemNextQuestionButton.removeAttribute("disabled");
+				ansId = this.value;
+				ansId = Number(ansId);
+				taskId = taskObj.id;
+			});
+			elemLabel.appendChild(elemInput);
+			elemLabel.insertAdjacentText("beforeEnd",taskObj.answers[key]);			
+			elemListItem.appendChild(elemLabel);			
+			self.elemTaskAnswers.appendChild(elemListItem);
+		});
+		/*for(var key in taskObj.answers){
 			var elemListItem = document.createElement("li");
 			elemListItem.className = "radio";			
 			var elemLabel = document.createElement("label");									
@@ -118,7 +116,7 @@ task.ViewTask = function(id) {
 			elemLabel.insertAdjacentText("beforeEnd",taskObj.answers[key]);			
 			elemListItem.appendChild(elemLabel);			
 			this.elemTaskAnswers.appendChild(elemListItem);
-		}
+		}*/
 	};
 	
 	this.renderResults = function(){
