@@ -74,7 +74,6 @@ task.ViewTask = function(id) {
 	};
 	
 	this.renderTask = function(taskObj){
-		console.log(taskObj);
 		if (taskObj.id === this._model._data.length){
 			this.elemNextQuestionButton.innerText = "Завершить тест";
 		}
@@ -103,35 +102,52 @@ task.ViewTask = function(id) {
 	
 	this.renderResults = function(){
 		this.elemTaskTitle.innerText = "Результат";
+		this.elemTaskQuestion.innerText = "";
 		var correctAnswersUser = 0;
-		var str = "";
 		var idAnswerUser;
+		var elemTemplateTasks = document.getElementById("templateTasks");
+		var templateTasks = _.template(elemTemplateTasks.innerHTML);
 		for (var i = 0; i < answersUser._answersArr.length; i++){
 			_.each(answersUser._answersArr[i],function(num,key){
 				idAnswerUser = answersUser._answersArr[i][key];
 				if (answersUser.comparisonAnswersUser(i,idAnswerUser) === true){
-					str += "<p style='color:green;'>" + key + ". " + this._model._data[i].question + " Ваш ответ: " + this._model._data[i].answers[idAnswerUser] + "</p>";
+					var resultValues = {
+						color : "green",
+						id : this._model._data[i].id,
+						question : this._model._data[i].question,
+						answer : this._model._data[i].answers[idAnswerUser]
+					}					
+					this.elemTaskQuestion.insertAdjacentHTML("beforeEnd",templateTasks(resultValues));
 					correctAnswersUser++;
 				} else{
-					str += "<p style='color:red;'>" + key + ". " + this._model._data[i].question + " Ваш ответ: " + this._model._data[i].answers[idAnswerUser] + "</p>";
+					var resultValues = {
+						color : "red",
+						id : this._model._data[i].id,
+						question : this._model._data[i].question,
+						answer : this._model._data[i].answers[idAnswerUser]
+					}					
+					this.elemTaskQuestion.insertAdjacentHTML("beforeEnd",templateTasks(resultValues));
 				}
 			},this);
 		}
-		str += "<p>Вы ответили правильно на " + correctAnswersUser + " из " + task.modelTask._data.length + " вопросов.</p>";
-		this.elemTaskQuestion.innerHTML = str;
+		
+		var elemResult = document.getElementById("testResult");
+		var templateResult = _.template(elemResult.innerHTML);
+		var result = {
+			correctAnswers : correctAnswersUser,
+			length: this._model._data.length
+		}		
+		this.elemTaskQuestion.insertAdjacentHTML("beforeEnd",templateResult(result));
 		this.elemNextQuestionButton.remove();
 	};
 	
 	this.reRender = function(){
+		while(this.elemTaskAnswers.firstChild){
+			this.elemTaskAnswers.removeChild(this.elemTaskAnswers.firstChild);
+		}
 		if (!this._model.getNextTask(this.currentTaskId)){
-			while(this.elemTaskAnswers.firstChild){
-				this.elemTaskAnswers.removeChild(this.elemTaskAnswers.firstChild);
-			}
 			this.renderResults();
 		} else{
-			while(this.elemTaskAnswers.firstChild){
-				this.elemTaskAnswers.removeChild(this.elemTaskAnswers.firstChild);
-			}
 			this.currentTask = this._model.getNextTask(this.currentTaskId);
 			this.currentTaskId = this.currentTask.id;
 			this.renderTask(this.currentTask);

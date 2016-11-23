@@ -26,6 +26,7 @@
 				</div>
 			</div>
 		</div>
+		
 		<script src="lib/jquery/dist/jquery.min.js">
 		</script>
 		<script src="lib/bootstrap/dist/js/bootstrap.min.js">
@@ -33,6 +34,12 @@
 		<script src="lib/underscore/underscore-min.js">
 		</script>
 		<script src="js/task.js">
+		</script>
+		<script type="text/html" id="templateTasks">
+			<p style="color:<%= color %>"><%= id %>. <%= question %><br/>Ваш ответ: <%= answer %>.</p>
+		</script>
+		<script type="text/html" id="testResult">
+			<h4>Вы ответили правильно на <%= correctAnswers %> из <%= length %> вопросов.</h4>
 		</script>
 	</body>
 </html>
