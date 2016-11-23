@@ -18,15 +18,16 @@ task.modelTask = {
 		} else {
 			taskData = JSON.parse(JSON.stringify(xhr.responseText).replace(/\\n/g,"\\n"));
 			this.setDataFromJson(taskData);
-		}
+		};
     },
-
-    setDataFromJson: function(data) {
-	   this._data = JSON.parse(data);
+	
+	setDataFromJson: function(data) {
+	   var d = JSON.parse(data);
+	   Object.defineProperty(task.modelTask, "_data", { value: d, enumerable: true, writable: false });
     },
 
     getTaskById: function(id) {
-        if (id <= this._data.length){
+		if (id <= this._data.length){
 			for(var i = 0; i < this._data.length; i++) {
 				for(var key in this._data[i]) {
 					if(key === 'id' && this._data[i][key] == id) {
