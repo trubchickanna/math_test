@@ -22,19 +22,14 @@ task.modelTask = {
     },
 	
 	setDataFromJson: function(data) {
-	   var d = JSON.parse(data);
-	   Object.defineProperty(task.modelTask, "_data", { value: d, enumerable: true, writable: false });
+	   var _data = JSON.parse(data);
+	   Object.defineProperty(task.modelTask, "_data", { value: _data, enumerable: true, writable: false });
     },
 
     getTaskById: function(id) {
 		if (id <= this._data.length){
-			for(var i = 0; i < this._data.length; i++) {
-				for(var key in this._data[i]) {
-					if(key === 'id' && this._data[i][key] == id) {
-						return this._data[i];
-					}
-				}
-			}
+			var result = _.findWhere(this._data, {id : id});
+			return result;
 		} else{
 			return;
 		}
