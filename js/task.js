@@ -62,7 +62,7 @@ task.ViewTask = function(id) {
 	this.currentTask = this._model.getTaskById(id);
 	this.elemBody = document.body;
 	this.elemTaskContainer = document.getElementById("taskContainer");
-	/*this.elemNextQuestionButton = document.getElementById("next-question-btn");*/
+	this.elemAnswersContainer = document.getElementById("answersContainer");
 	this.currentTaskId = id;
 	this.elemTemplateTasks = document.getElementById("templateTasks");
 	this.elemResult = document.getElementById("testResult");
@@ -86,11 +86,15 @@ task.ViewTask = function(id) {
 			var taskTemplate = _.template(this.elemTaskContainer.innerHTML);
 			var task = {
 				taskTitle: taskObj.id,
-				taskQuestion: taskObj.question,
-				answers: taskObj.answers,
-				buttonText: "Завершить тест"
+				taskQuestion: taskObj.question
 			}
 			this.elemBody.insertAdjacentHTML("afterBegin",taskTemplate(task));
+			var elemTask = document.getElementById("task");
+			var answersTemplate = _.template(this.elemAnswersContainer.innerHTML);
+			var answer = {
+				answers: taskObj.answers
+			}
+			elemTask.insertAdjacentHTML("beforeEnd",answersTemplate(answer));
 		} else{
 			var taskTemplate = _.template(this.elemTaskContainer.innerHTML);
 			var task = {
@@ -100,6 +104,12 @@ task.ViewTask = function(id) {
 				buttonText: "Следующий вопрос"
 			}
 			this.elemBody.insertAdjacentHTML("afterBegin",taskTemplate(task));
+			var elemTask = document.getElementById("task");
+			var answersTemplate = _.template(this.elemAnswersContainer.innerHTML);
+			var answer = {
+				answers: taskObj.answers
+			}
+			elemTask.insertAdjacentHTML("beforeEnd",answersTemplate(answer));
 		}
 		/*
 		_.each(taskObj.answers,function(num,key){

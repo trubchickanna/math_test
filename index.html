@@ -7,6 +7,9 @@
 		<link rel="stylesheet" type="text/css" href="lib/bootstrap/dist/css/bootstrap-theme.min.css">
 	</head>
 	<body>
+		<button type="button" class="btn btn-primary" id="next-question-btn" disabled="disabled">
+			<%= buttonText %>
+		</button>
 		<script type="text/html" id="taskContainer">
 			<div class="container-fluid">
 				<div class="row">
@@ -22,23 +25,21 @@
 									<%= taskQuestion %>
 								</p>
 							</div>
-							<ul class="list-unstyled" id="answers">
-								<% _.each(answers, function(num,key){ %>
-									<label>
-										<li>
-											<input type="radio" name="optionsRadios" value="<%= key %>"> <%= num %>
-										</li>
-									</label>
-									<br>
-								<% }); %>
-							</ul>
-							<button type="button" class="btn btn-primary" id="next-question-btn" disabled="disabled">
-								<%= buttonText %>
-							</button>
 						</div>
 					</div>
 				</div>
 			</div>
+		</script>
+		<script type="text/html" id="answersContainer">
+			<ul class="list-unstyled" id="answers">
+				<% _.each(answers, function(num,key){ %>
+					<li>
+						<label>
+							<input type="radio" name="optionsRadios" value="<%= key %>"> <%= num %>
+						</label>
+					</li>
+				<% }); %>
+			</ul>
 		</script>
 		<script type="text/html" id="templateTasks">
 			<p style="color:<%= color %>"><%= id %>. <%= question %><br/>Ваш ответ: <%= answer %>.</p>
