@@ -40,6 +40,18 @@ task.modelTask = {
 		if (this._nextId <= this._data.length){
 			return this.getTaskById(this._nextId);
 		}
+	},
+	
+	getData: function(i){
+		if (i < this._data.length){
+			return this._data[i];
+		} else{
+			return;
+		}
+	},
+	
+	getDataLength: function(){
+		return this._data.length;
 	}
 };
 
@@ -48,12 +60,12 @@ task.modelTask.init();
 task.ViewTask = function(id) {
 	this._model = task.modelTask;
 	this.currentTask = this._model.getTaskById(id);
-	this.elem = document.getElementById("task");
-	this.elemTaskTitle = this.elem.querySelector(".task-title");
-	this.elemTaskQuestion = this.elem.querySelector(".task-question");
-	this.elemTaskAnswers = document.getElementById("answers");
-	this.elemNextQuestionButton = document.getElementById("next-question-btn");
+	this.elemBody = document.body;
+	this.elemTaskContainer = document.getElementById("taskContainer");
+	/*this.elemNextQuestionButton = document.getElementById("next-question-btn");*/
 	this.currentTaskId = id;
+	this.elemTemplateTasks = document.getElementById("templateTasks");
+	this.elemResult = document.getElementById("testResult");
 	var taskId = null;
 	var ansId = null;
 	var self = this;
@@ -63,18 +75,33 @@ task.ViewTask = function(id) {
 			this.renderTask(this.currentTask);
 		}
 		
-		this.elemNextQuestionButton.addEventListener("click",function(){
+		/*this.elemNextQuestionButton.addEventListener("click",function(){
 			answersUser.setAnswer(taskId,ansId);
 			self.reRender();
-		});
+		});*/
 	};
 	
 	this.renderTask = function(taskObj){
-		if (taskObj.id === this._model._data.length){
-			this.elemNextQuestionButton.innerText = "Завершить тест";
+		if (taskObj.id === this._model.getDataLength()){
+			var taskTemplate = _.template(this.elemTaskContainer.innerHTML);
+			var task = {
+				taskTitle: taskObj.id,
+				taskQuestion: taskObj.question,
+				answers: taskObj.answers,
+				buttonText: "Завершить тест"
+			}
+			this.elemBody.insertAdjacentHTML("afterBegin",taskTemplate(task));
+		} else{
+			var taskTemplate = _.template(this.elemTaskContainer.innerHTML);
+			var task = {
+				taskTitle: taskObj.id,
+				taskQuestion: taskObj.question,
+				answers: taskObj.answers,
+				buttonText: "Следующий вопрос"
+			}
+			this.elemBody.insertAdjacentHTML("afterBegin",taskTemplate(task));
 		}
-		this.elemTaskTitle.innerText = 'Задача № '+taskObj.id+'.';
-		this.elemTaskQuestion.innerText = taskObj.question;
+		/*
 		_.each(taskObj.answers,function(num,key){
 			var elemListItem = document.createElement("li");
 			elemListItem.className = "radio";			
@@ -93,7 +120,7 @@ task.ViewTask = function(id) {
 			elemLabel.insertAdjacentText("beforeEnd",taskObj.answers[key]);			
 			elemListItem.appendChild(elemLabel);			
 			this.elemTaskAnswers.appendChild(elemListItem);
-		},this);
+		},this);*/
 	};
 	
 	this.renderResults = function(){
@@ -101,37 +128,34 @@ task.ViewTask = function(id) {
 		this.elemTaskQuestion.innerText = "";
 		var correctAnswersUser = 0;
 		var idAnswerUser;
-		var elemTemplateTasks = document.getElementById("templateTasks");
-		var templateTasks = _.template(elemTemplateTasks.innerHTML);
+		var templateTasks = _.template(this.elemTemplateTasks.innerHTML);
 		for (var i = 0; i < answersUser._answersArr.length; i++){
 			_.each(answersUser._answersArr[i],function(num,key){
 				idAnswerUser = answersUser._answersArr[i][key];
 				if (answersUser.comparisonAnswersUser(i,idAnswerUser) === true){
 					var resultValues = {
 						color : "green",
-						id : this._model._data[i].id,
-						question : this._model._data[i].question,
-						answer : this._model._data[i].answers[idAnswerUser]
+						id : this._model.getData(i).id,
+						question : this._model.getData(i).question,
+						answer : this._model.getData(i).answers[idAnswerUser]
 					}					
 					this.elemTaskQuestion.insertAdjacentHTML("beforeEnd",templateTasks(resultValues));
 					correctAnswersUser++;
 				} else{
 					var resultValues = {
 						color : "red",
-						id : this._model._data[i].id,
-						question : this._model._data[i].question,
-						answer : this._model._data[i].answers[idAnswerUser]
+						id : this._model.getData(i).id,
+						question : this._model.getData(i).question,
+						answer : this._model.getData(i).answers[idAnswerUser]
 					}					
 					this.elemTaskQuestion.insertAdjacentHTML("beforeEnd",templateTasks(resultValues));
 				}
 			},this);
 		}
 		
-		var elemResult = document.getElementById("testResult");
-		var templateResult = _.template(elemResult.innerHTML);
+		var templateResult = _.template(this.elemResult.innerHTML);
 		var result = {
-			correctAnswers : correctAnswersUser,
-			length: this._model._data.length
+			correctAnswers : correctAnswersUser
 		}		
 		this.elemTaskQuestion.insertAdjacentHTML("beforeEnd",templateResult(result));
 		this.elemNextQuestionButton.remove();
