@@ -60,9 +60,11 @@ task.modelTask.init();
 task.ViewTask = function(id) {
 	this._model = task.modelTask;
 	this.currentTask = this._model.getTaskById(id);
-	this.elemBody = document.body;
+	this.elemContainer = document.getElementById("container");
 	this.elemTaskContainer = document.getElementById("taskContainer");
 	this.elemAnswersContainer = document.getElementById("answersContainer");
+	this.elemAnswersContainer = document.getElementById("answersContainer");
+	this.elemButtonContainer = document.getElementById("buttonContainer");
 	this.currentTaskId = id;
 	this.elemTemplateTasks = document.getElementById("templateTasks");
 	this.elemResult = document.getElementById("testResult");
@@ -82,35 +84,26 @@ task.ViewTask = function(id) {
 	};
 	
 	this.renderTask = function(taskObj){
-		if (taskObj.id === this._model.getDataLength()){
-			var taskTemplate = _.template(this.elemTaskContainer.innerHTML);
-			var task = {
+		var taskTemplate = _.template(this.elemTaskContainer.innerHTML);
+		var task = {
 				taskTitle: taskObj.id,
 				taskQuestion: taskObj.question
-			}
-			this.elemBody.insertAdjacentHTML("afterBegin",taskTemplate(task));
-			var elemTask = document.getElementById("task");
-			var answersTemplate = _.template(this.elemAnswersContainer.innerHTML);
-			var answer = {
-				answers: taskObj.answers
-			}
-			elemTask.insertAdjacentHTML("beforeEnd",answersTemplate(answer));
-		} else{
-			var taskTemplate = _.template(this.elemTaskContainer.innerHTML);
-			var task = {
-				taskTitle: taskObj.id,
-				taskQuestion: taskObj.question,
-				answers: taskObj.answers,
-				buttonText: "Следующий вопрос"
-			}
-			this.elemBody.insertAdjacentHTML("afterBegin",taskTemplate(task));
-			var elemTask = document.getElementById("task");
-			var answersTemplate = _.template(this.elemAnswersContainer.innerHTML);
-			var answer = {
-				answers: taskObj.answers
-			}
-			elemTask.insertAdjacentHTML("beforeEnd",answersTemplate(answer));
 		}
+		this.elemContainer.insertAdjacentHTML("afterBegin",taskTemplate(task));
+		var elemPanel = document.getElementById("panel");
+		var answersTemplate = _.template(this.elemAnswersContainer.innerHTML);
+		var ans = {
+			answers: taskObj.answers
+		}
+		elemPanel.insertAdjacentHTML("beforeEnd",answersTemplate(ans));
+		var buttonTemplate = _.template(this.elemButtonContainer.innerHTML);
+		var but = {
+			buttonText: "Следующий вопрос"
+		}
+		if (taskObj.id === this._model.getDataLength()){
+			but.buttonText = "Завершить тест";
+		}
+		elemPanel.insertAdjacentHTML("beforeEnd",buttonTemplate(but));
 		/*
 		_.each(taskObj.answers,function(num,key){
 			var elemListItem = document.createElement("li");
@@ -134,41 +127,36 @@ task.ViewTask = function(id) {
 	};
 	
 	this.renderResults = function(){
-		this.elemTaskTitle.innerText = "Результат";
+		console.log("finish");
+		/*this.elemTaskTitle.innerText = "Результат";
 		this.elemTaskQuestion.innerText = "";
 		var correctAnswersUser = 0;
 		var idAnswerUser;
 		var templateTasks = _.template(this.elemTemplateTasks.innerHTML);
+		var resultValues = {
+			color : "green",
+			id : this._model.getData(i).id,
+			question : this._model.getData(i).question,
+			answer : this._model.getData(i).answers[idAnswerUser]
+		}
 		for (var i = 0; i < answersUser._answersArr.length; i++){
 			_.each(answersUser._answersArr[i],function(num,key){
 				idAnswerUser = answersUser._answersArr[i][key];
-				if (answersUser.comparisonAnswersUser(i,idAnswerUser) === true){
-					var resultValues = {
-						color : "green",
-						id : this._model.getData(i).id,
-						question : this._model.getData(i).question,
-						answer : this._model.getData(i).answers[idAnswerUser]
-					}					
-					this.elemTaskQuestion.insertAdjacentHTML("beforeEnd",templateTasks(resultValues));
+				if (answersUser.comparisonAnswersUser(i,idAnswerUser) === true){					
 					correctAnswersUser++;
 				} else{
-					var resultValues = {
-						color : "red",
-						id : this._model.getData(i).id,
-						question : this._model.getData(i).question,
-						answer : this._model.getData(i).answers[idAnswerUser]
-					}					
-					this.elemTaskQuestion.insertAdjacentHTML("beforeEnd",templateTasks(resultValues));
+					resultValues.color = "red";
 				}
-			},this);
+			});
 		}
-		
+
+		this.elemTaskQuestion.insertAdjacentHTML("beforeEnd",templateTasks(resultValues));		
 		var templateResult = _.template(this.elemResult.innerHTML);
 		var result = {
 			correctAnswers : correctAnswersUser
 		}		
 		this.elemTaskQuestion.insertAdjacentHTML("beforeEnd",templateResult(result));
-		this.elemNextQuestionButton.remove();
+		this.elemNextQuestionButton.remove();*/
 	};
 	
 	this.reRender = function(){
